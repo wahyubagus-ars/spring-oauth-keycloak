@@ -1,0 +1,9 @@
+server:
+  port: 8085
+  servlet:
+    context-path: /api
+keycloak:
+  client-id: auth-service-v1
+  client-secret: a1VfBPQiKfagQEseiECdSmGaRELxbfBy
+  get-token-url: http://localhost:9090/realms/microservices-v1/protocol/openid-connect/token
+  issuer-url: http://localhost:9090/realms/microservices-v1
