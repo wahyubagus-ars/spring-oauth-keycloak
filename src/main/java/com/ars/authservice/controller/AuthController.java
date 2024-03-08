@@ -2,6 +2,7 @@ package com.ars.authservice.controller;
 
 import com.ars.authservice.domain.dto.LoginRequestDto;
 import com.ars.authservice.service.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,5 +21,10 @@ public class AuthController {
     @PostMapping(value = "/login")
     public ResponseEntity<Object> login(@RequestBody LoginRequestDto request, HttpServletResponse servletResponse) {
         return authService.login(request, servletResponse);
+    }
+
+    @PostMapping(value = "/refresh-token")
+    public ResponseEntity<Object> refreshToken(HttpServletRequest servletRequest, HttpServletResponse servletResponse) {
+        return authService.refreshToken(servletRequest, servletResponse);
     }
 }
