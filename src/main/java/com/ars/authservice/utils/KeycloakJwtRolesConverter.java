@@ -38,7 +38,6 @@ public class KeycloakJwtRolesConverter implements Converter<Jwt, Collection<Gran
                     if (resourceAccess != null && !resourceAccess.isEmpty() && resourceAccess.containsKey(kcClientId)) {
                         resourceAccess.get(kcClientId).get(CLAIM_ROLES).forEach(resourceRole -> {
                             String role = String.format("%s_%s", r, resourceRole).toUpperCase(Locale.ROOT);
-                            log.info("role: {}", role);
                             grantedAuthorities.add(new SimpleGrantedAuthority(role));
                         });
                     } else {
