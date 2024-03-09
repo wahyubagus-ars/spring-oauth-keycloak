@@ -1,4 +1,4 @@
-package com.ars.authservice.config;
+package com.ars.authservice.config.auth;
 
 import com.ars.authservice.domain.dto.BaseResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;

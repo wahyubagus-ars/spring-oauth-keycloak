@@ -19,8 +19,9 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping(value = "/login")
-    public ResponseEntity<Object> login(@RequestBody LoginRequestDto request, HttpServletResponse servletResponse) {
-        return authService.login(request, servletResponse);
+    public ResponseEntity<Object> login(@RequestBody LoginRequestDto request, HttpServletRequest servletRequest,
+                                        HttpServletResponse servletResponse) {
+        return authService.login(request, servletRequest, servletResponse);
     }
 
     @PostMapping(value = "/refresh-token")

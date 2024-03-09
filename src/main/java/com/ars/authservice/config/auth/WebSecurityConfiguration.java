@@ -1,4 +1,4 @@
-package com.ars.authservice.config;
+package com.ars.authservice.config.auth;
 
 import com.ars.authservice.utils.KeycloakJwtRolesConverter;
 import lombok.extern.slf4j.Slf4j;

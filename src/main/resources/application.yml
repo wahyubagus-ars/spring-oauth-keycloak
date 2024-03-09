@@ -4,6 +4,12 @@ server:
     context-path: /api
 keycloak:
   client-id: auth-service-v1
-  client-secret: a1VfBPQiKfagQEseiECdSmGaRELxbfBy
+  client-secret: 1q0bkzhBT0VlVRtN4y2km9MyFxnXwV1a
   get-token-url: http://localhost:9090/realms/microservices-v1/protocol/openid-connect/token
   issuer-url: http://localhost:9090/realms/microservices-v1
+redis:
+  config:
+    cache:
+      host: localhost
+      port: 6379
+      password: microservices-1

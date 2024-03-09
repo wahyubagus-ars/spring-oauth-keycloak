@@ -1,5 +1,6 @@
 package com.ars.authservice.service;
 
+import com.ars.authservice.config.redis.SessionStorage;
 import com.ars.authservice.domain.dto.BaseResponseDto;
 import com.ars.authservice.domain.dto.LoginRequestDto;
 import com.ars.authservice.domain.dto.TokenDto;
@@ -21,6 +22,9 @@ public class AuthService {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private SessionStorage sessionStorage;
+
     @Value("${keycloak.client-id}")
     private String kcClientId;
 
@@ -30,26 +34,23 @@ public class AuthService {
     @Value("${keycloak.get-token-url}")
     private String kcGetTokenUrl;
 
-    @Value("${keycloak.logout-url}")
-    private String kcLogoutUrl;
-
     private static final String GRANT_TYPE_PASSWORD = "password";
     private static final String ACCESS_TOKEN = "Access-Token";
     private static final String REFRESH_TOKEN = "Refresh-Token";
     private static final String EXPIRES_IN = "Expires-In";
+    private static final String DEVICE_ID = "Device-Id";
 
-    public ResponseEntity<Object> login(LoginRequestDto request, HttpServletResponse servletResponse) {
+    public ResponseEntity<Object> login(LoginRequestDto request, HttpServletRequest servletRequest, HttpServletResponse servletResponse) {
         log.info("Start to get access token");
+
+        String deviceId = servletRequest.getHeader(DEVICE_ID);
 
         TokenDto tokenDto = this.getAccessToken(request);
 
         servletResponse.addHeader(ACCESS_TOKEN, tokenDto.getAccessToken());
-        servletResponse.addHeader(REFRESH_TOKEN, tokenDto.getRefreshToken());
         servletResponse.addHeader(EXPIRES_IN, String.valueOf(tokenDto.getExpiresIn()));
 
-        /**
-         * You can store the refresh token in a database such as Redis.
-         */
+        sessionStorage.putCache(REFRESH_TOKEN, deviceId, tokenDto.getRefreshToken(), 1800);
 
         return ResponseEntity.ok().body(BaseResponseDto.builder()
                 .status("SUCCESS")
@@ -59,20 +60,18 @@ public class AuthService {
     public ResponseEntity<Object> refreshToken(HttpServletRequest servletRequest, HttpServletResponse servletResponse) {
         log.info("Start to refresh access token");
 
-        String refreshToken = servletRequest.getHeader("refresh_token");
+        String deviceId = servletRequest.getHeader(DEVICE_ID);
+        String refreshToken = (String) sessionStorage.getCache(REFRESH_TOKEN, deviceId);
 
         TokenDto tokenDto = this.getRefreshToken(refreshToken);
 
         servletResponse.addHeader(ACCESS_TOKEN, tokenDto.getAccessToken());
         servletResponse.addHeader(EXPIRES_IN, String.valueOf(tokenDto.getExpiresIn()));
 
-        /**
-         * You can store the refresh token in a database such as Redis.
-         */
+        sessionStorage.putCache(REFRESH_TOKEN, deviceId, tokenDto.getRefreshToken(), tokenDto.getRefreshExpiresIn());
 
         return ResponseEntity.ok().body(BaseResponseDto.builder()
                 .status("SUCCESS")
-                .data(tokenDto)
                 .build());
     }
 
