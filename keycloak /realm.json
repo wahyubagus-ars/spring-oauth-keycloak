@@ -1,0 +1,49 @@
+{
+  "id": "PowerRanger",
+  "realm": "PowerRanger",
+  "sslRequired": "none",
+  "enabled": true,
+  "eventsEnabled": true,
+  "eventsExpiration": 900,
+  "adminEventsEnabled": true,
+  "adminEventsDetailsEnabled": true,
+  "attributes": {
+    "adminEventsExpiration": "900"
+  },
+  "clients": [
+    {
+      "id": "grafana",
+      "clientId": "grafana",
+      "name": "grafana",
+      "enabled": true,
+      "publicClient": true,
+      "rootUrl": "${GF_URL}",
+      "adminUrl": "${GF_URL}",
+      "baseUrl": "${GF_URL}",
+      "redirectUris": [
+        "${GF_URL}/*"
+      ],
+      "webOrigins": [
+        "${GF_URL}"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "id": "admin",
+      "email": "hendisantika@yopmail.com",
+      "username": "yuji",
+      "firstName": "DevOps",
+      "lastName": "SRE",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "temporary": false,
+          "type": "password",
+          "value": "S3cret"
+        }
+      ]
+    }
+  ]
+}
